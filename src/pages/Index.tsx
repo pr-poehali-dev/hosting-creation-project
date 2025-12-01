@@ -9,6 +9,7 @@ const Index = () => {
   const [terminalHistory, setTerminalHistory] = useState<Array<{ command: string; output: string }>>([
     { command: 'system status', output: '✓ All systems operational\n✓ 99.99% uptime\n✓ 234 servers active' }
   ]);
+  const [isDeploying, setIsDeploying] = useState(false);
   const terminalRef = useRef<HTMLDivElement>(null);
 
   const handleCommand = (cmd: string) => {
@@ -42,6 +43,27 @@ const Index = () => {
 
     setTerminalHistory([...terminalHistory, { command: cmd, output }]);
     setTerminalInput('');
+  };
+
+  const handleStartHosting = () => {
+    setIsDeploying(true);
+    const consoleSection = document.getElementById('console');
+    consoleSection?.scrollIntoView({ behavior: 'smooth' });
+    
+    setTimeout(() => {
+      const deployCommand = 'deploy my-awesome-app';
+      const output = `Deploying my-awesome-app...
+✓ Initializing cloud resources
+✓ Setting up load balancer
+✓ Configuring DNS
+✓ Build successful
+✓ Deployment complete
+→ https://my-awesome-app.cloudhost.dev
+
+🎉 Your hosting is live!`;
+      setTerminalHistory([...terminalHistory, { command: deployCommand, output }]);
+      setIsDeploying(false);
+    }, 2000);
   };
 
   useEffect(() => {
@@ -81,9 +103,23 @@ const Index = () => {
             Разворачивайте приложения за секунды. Автоматическое масштабирование, 99.99% uptime и глобальная CDN сеть.
           </p>
           <div className="flex gap-4 justify-center">
-            <Button size="lg" className="bg-primary hover:bg-primary/90">
-              <Icon name="Rocket" className="mr-2" size={20} />
-              Запустить проект
+            <Button 
+              size="lg" 
+              className="bg-primary hover:bg-primary/90"
+              onClick={handleStartHosting}
+              disabled={isDeploying}
+            >
+              {isDeploying ? (
+                <>
+                  <Icon name="Loader2" className="mr-2 animate-spin" size={20} />
+                  Запускаем...
+                </>
+              ) : (
+                <>
+                  <Icon name="Rocket" className="mr-2" size={20} />
+                  Запустить хостинг
+                </>
+              )}
             </Button>
             <Button size="lg" variant="outline" className="border-white/20 hover:bg-white/10">
               Посмотреть демо
