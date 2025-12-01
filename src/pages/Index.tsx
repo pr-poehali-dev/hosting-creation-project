@@ -56,17 +56,17 @@ const Index = () => {
       default:
         if (command === 'ls' || command.startsWith('ls ')) {
           const path = command.replace('ls', '').trim() || '/var/www/html';
-          output = `📁 Listing: ${path}\n\n╭────────────────────┬─────────┬──────────────────╮\n│ Name               │ Size    │ Modified         │\n├────────────────────┼─────────┼──────────────────┤\n│ 📁 public          │ -       │ 2024-12-01 14:23 │\n│ 📁 src             │ -       │ 2024-12-01 15:45 │\n│ 📁 node_modules    │ -       │ 2024-11-28 10:12 │\n│ 📄 index.html      │ 1.2 KB  │ 2024-12-01 14:20 │\n│ 📄 package.json    │ 856 B   │ 2024-11-30 09:15 │\n│ 📄 vite.config.ts  │ 423 B   │ 2024-11-28 11:34 │\n│ 📄 .env            │ 234 B   │ 2024-12-01 12:05 │\n╰────────────────────┴─────────┴──────────────────╯\n\n💡 Используйте: cat [filename] для просмотра';
+          output = `[DIR] Listing: ${path}\n\n${'┌'}${'─'.repeat(20)}${'┬'}${'─'.repeat(9)}${'┬'}${'─'.repeat(18)}${'┐'}\n${'│'} Name               ${'│'} Size    ${'│'} Modified         ${'│'}\n${'├'}${'─'.repeat(20)}${'┼'}${'─'.repeat(9)}${'┼'}${'─'.repeat(18)}${'┤'}\n${'│'} [DIR] public       ${'│'} -       ${'│'} 2024-12-01 14:23 ${'│'}\n${'│'} [DIR] src          ${'│'} -       ${'│'} 2024-12-01 15:45 ${'│'}\n${'│'} [DIR] node_modules ${'│'} -       ${'│'} 2024-11-28 10:12 ${'│'}\n${'│'} [FILE] index.html  ${'│'} 1.2 KB  ${'│'} 2024-12-01 14:20 ${'│'}\n${'│'} [FILE] package.json${'│'} 856 B   ${'│'} 2024-11-30 09:15 ${'│'}\n${'│'} [FILE] vite.config ${'│'} 423 B   ${'│'} 2024-11-28 11:34 ${'│'}\n${'│'} [FILE] .env        ${'│'} 234 B   ${'│'} 2024-12-01 12:05 ${'│'}\n${'└'}${'─'.repeat(20)}${'┴'}${'─'.repeat(9)}${'┴'}${'─'.repeat(18)}${'┘'}\n\nTip: Use cat [filename] to view file contents';
         } else if (command.startsWith('cat ')) {
           const filename = command.replace('cat', '').trim();
           if (filename === 'package.json') {
-            output = `📄 ${filename}\n\n{\n  "name": "my-awesome-app",\n  "version": "1.0.0",\n  "scripts": {\n    "dev": "vite",\n    "build": "vite build",\n    "preview": "vite preview"\n  },\n  "dependencies": {\n    "react": "^18.2.0",\n    "react-dom": "^18.2.0"\n  }\n}`;
+            output = `File: ${filename}\n\n{\n  "name": "my-awesome-app",\n  "version": "1.0.0",\n  "scripts": {\n    "dev": "vite",\n    "build": "vite build",\n    "preview": "vite preview"\n  },\n  "dependencies": {\n    "react": "^18.2.0",\n    "react-dom": "^18.2.0"\n  }\n}`;
           } else if (filename === '.env') {
-            output = `📄 ${filename}\n\nVITE_API_URL=https://api.cloudhost.dev\nVITE_APP_NAME=my-awesome-app\nPORT=3000\nNODE_ENV=production`;
+            output = `File: ${filename}\n\nVITE_API_URL=https://api.cloudhost.dev\nVITE_APP_NAME=my-awesome-app\nPORT=3000\nNODE_ENV=production`;
           } else if (filename === 'index.html') {
-            output = `📄 ${filename}\n\n<!DOCTYPE html>\n<html lang="en">\n  <head>\n    <meta charset="UTF-8" />\n    <meta name="viewport" content="width=device-width" />\n    <title>My Awesome App</title>\n  </head>\n  <body>\n    <div id="root"></div>\n    <script type="module" src="/src/main.tsx"></script>\n  </body>\n</html>`;
+            output = `File: ${filename}\n\n<!DOCTYPE html>\n<html lang="en">\n  <head>\n    <meta charset="UTF-8" />\n    <meta name="viewport" content="width=device-width" />\n    <title>My Awesome App</title>\n  </head>\n  <body>\n    <div id="root"></div>\n    <script type="module" src="/src/main.tsx"></script>\n  </body>\n</html>`;
           } else {
-            output = `❌ File not found: ${filename}\n\n💡 Use 'ls' to see available files`;
+            output = `[ERROR] File not found: ${filename}\n\nTip: Use 'ls' to see available files`;
           }
         } else if (command.startsWith('deploy ')) {
           const parts = command.split(' ');
