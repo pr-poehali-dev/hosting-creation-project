@@ -60,13 +60,42 @@ const Index = () => {
         } else if (command.startsWith('cat ')) {
           const filename = command.replace('cat', '').trim();
           if (filename === 'package.json') {
-            output = `File: ${filename}\n\n{\n  "name": "my-awesome-app",\n  "version": "1.0.0",\n  "scripts": {\n    "dev": "vite",\n    "build": "vite build",\n    "preview": "vite preview"\n  },\n  "dependencies": {\n    "react": "^18.2.0",\n    "react-dom": "^18.2.0"\n  }\n}`;
+            output = 'File: ' + filename + '\n\n' +
+              '{\n' +
+              '  "name": "my-awesome-app",\n' +
+              '  "version": "1.0.0",\n' +
+              '  "scripts": {\n' +
+              '    "dev": "vite",\n' +
+              '    "build": "vite build",\n' +
+              '    "preview": "vite preview"\n' +
+              '  },\n' +
+              '  "dependencies": {\n' +
+              '    "react": "^18.2.0",\n' +
+              '    "react-dom": "^18.2.0"\n' +
+              '  }\n' +
+              '}';
           } else if (filename === '.env') {
-            output = `File: ${filename}\n\nVITE_API_URL=https://api.cloudhost.dev\nVITE_APP_NAME=my-awesome-app\nPORT=3000\nNODE_ENV=production`;
+            output = 'File: ' + filename + '\n\n' +
+              'VITE_API_URL=https://api.cloudhost.dev\n' +
+              'VITE_APP_NAME=my-awesome-app\n' +
+              'PORT=3000\n' +
+              'NODE_ENV=production';
           } else if (filename === 'index.html') {
-            output = `File: ${filename}\n\n<!DOCTYPE html>\n<html lang="en">\n  <head>\n    <meta charset="UTF-8" />\n    <meta name="viewport" content="width=device-width" />\n    <title>My Awesome App</title>\n  </head>\n  <body>\n    <div id="root"></div>\n    <script type="module" src="/src/main.tsx"></script>\n  </body>\n</html>`;
+            output = 'File: ' + filename + '\n\n' +
+              '<!DOCTYPE html>\n' +
+              '<html lang="en">\n' +
+              '  <head>\n' +
+              '    <meta charset="UTF-8" />\n' +
+              '    <meta name="viewport" content="width=device-width" />\n' +
+              '    <title>My Awesome App</title>\n' +
+              '  </head>\n' +
+              '  <body>\n' +
+              '    <div id="root"></div>\n' +
+              '    <script type="module" src="/src/main.tsx"></script>\n' +
+              '  </body>\n' +
+              '</html>';
           } else {
-            output = `[ERROR] File not found: ${filename}\n\nTip: Use 'ls' to see available files`;
+            output = '[ERROR] File not found: ' + filename + '\n\nTip: Use \'ls\' to see available files';
           }
         } else if (command.startsWith('deploy ')) {
           const parts = command.split(' ');
