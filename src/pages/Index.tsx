@@ -18,10 +18,16 @@ const Index = () => {
 
     switch (command) {
       case 'help':
-        output = 'Available commands:\n- start - запустить сервер\n- deploy [app-name]\n- status\n- servers list\n- server ip\n- clear';
+        output = 'Available commands:\n- start - запустить сервер\n- stop - остановить сервер\n- restart - перезапустить сервер\n- deploy [app-name]\n- status\n- servers list\n- server ip\n- clear';
         break;
       case 'start':
         output = 'Starting server...\n⚡ Initializing server instance\n⚡ Allocating resources (4 vCPU, 8GB RAM)\n⚡ Configuring network (IP: 45.123.67.89)\n⚡ Starting services\n⚡ Running health checks\n✓ Server started successfully!\n\n📊 Server details:\n  Region: us-east-1\n  IP: 45.123.67.89\n  Status: 🟢 Running\n  Uptime: 0s\n  Load: 0%\n\n🚀 Server is ready to accept connections!';
+        break;
+      case 'stop':
+        output = 'Stopping server...\n⏸️  Draining active connections\n⏸️  Saving state\n⏸️  Releasing resources\n⏸️  Shutting down services\n✓ Server stopped successfully!\n\n📊 Server details:\n  Region: us-east-1\n  IP: 45.123.67.89\n  Status: 🔴 Stopped\n  Last uptime: 2h 34m\n\n💤 Server is offline';
+        break;
+      case 'restart':
+        output = 'Restarting server...\n🔄 Stopping current instance\n⏸️  Draining connections\n⏸️  Saving state\n✓ Server stopped\n\n⚡ Starting new instance\n⚡ Initializing server\n⚡ Restoring state\n⚡ Configuring network (IP: 45.123.67.89)\n⚡ Starting services\n✓ Server restarted successfully!\n\n📊 Server details:\n  Region: us-east-1\n  IP: 45.123.67.89\n  Status: 🟢 Running\n  Uptime: 0s\n  Load: 12%\n\n🔄 Restart completed in 4.2s';
         break;
       case 'status':
         output = '✓ All systems operational\n✓ 99.99% uptime\n✓ 234 servers active\n✓ Load: 45%';
@@ -310,7 +316,7 @@ const Index = () => {
           </div>
 
           <div className="bg-[#161B22] px-4 py-2 border-t border-white/10 flex gap-4 text-xs text-gray-400">
-            <span>Команды: start, help, status, deploy, servers list, server ip, clear</span>
+            <span>Команды: start, stop, restart, help, status, deploy, servers list, server ip, clear</span>
           </div>
         </Card>
       </section>
