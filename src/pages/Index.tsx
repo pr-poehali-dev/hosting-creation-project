@@ -18,13 +18,16 @@ const Index = () => {
 
     switch (command) {
       case 'help':
-        output = 'Available commands:\n- deploy [app-name]\n- status\n- servers list\n- clear';
+        output = 'Available commands:\n- deploy [app-name]\n- status\n- servers list\n- server ip\n- clear';
         break;
       case 'status':
         output = '✓ All systems operational\n✓ 99.99% uptime\n✓ 234 servers active\n✓ Load: 45%';
         break;
       case 'servers list':
-        output = 'Active servers:\n- us-east-1: ✓ Online\n- eu-west-1: ✓ Online\n- ap-southeast-1: ✓ Online';
+        output = 'Active servers:\n- us-east-1: ✓ Online (IP: 45.123.67.89)\n- eu-west-1: ✓ Online (IP: 78.234.12.45)\n- ap-southeast-1: ✓ Online (IP: 103.45.89.23)';
+        break;
+      case 'server ip':
+        output = 'Server IP addresses:\n\n╭─────────────────┬──────────────────╮\n│ Region          │ IP Address       │\n├─────────────────┼──────────────────┤\n│ us-east-1       │ 45.123.67.89     │\n│ eu-west-1       │ 78.234.12.45     │\n│ ap-southeast-1  │ 103.45.89.23     │\n│ load-balancer   │ 185.67.234.12    │\n╰─────────────────┴──────────────────╯';
         break;
       case 'clear':
         setTerminalHistory([]);
@@ -54,11 +57,13 @@ const Index = () => {
       const deployCommand = 'deploy my-awesome-app';
       const output = `Deploying my-awesome-app...
 ✓ Initializing cloud resources
-✓ Setting up load balancer
+✓ Setting up load balancer (IP: 185.67.234.12)
 ✓ Configuring DNS
+✓ Assigned server: us-east-1 (45.123.67.89)
 ✓ Build successful
 ✓ Deployment complete
 → https://my-awesome-app.cloudhost.dev
+→ Server IP: 45.123.67.89
 
 🎉 Your hosting is live!`;
       setTerminalHistory([...terminalHistory, { command: deployCommand, output }]);
@@ -302,7 +307,7 @@ const Index = () => {
           </div>
 
           <div className="bg-[#161B22] px-4 py-2 border-t border-white/10 flex gap-4 text-xs text-gray-400">
-            <span>Команды: help, status, deploy, servers list, clear</span>
+            <span>Команды: help, status, deploy, servers list, server ip, clear</span>
           </div>
         </Card>
       </section>
