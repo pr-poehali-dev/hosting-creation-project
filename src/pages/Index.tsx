@@ -18,7 +18,7 @@ const Index = () => {
 
     switch (command) {
       case 'help':
-        output = 'Available commands:\n- start - запустить сервер\n- stop - остановить сервер\n- restart - перезапустить сервер\n- deploy [app-name] [region] - задеплоить приложение\n- monitor - показать нагрузку серверов\n- regions - список доступных регионов\n- status\n- servers list\n- server ip\n- clear';
+        output = 'Available commands:\n- start - запустить сервер\n- stop - остановить сервер\n- restart - перезапустить сервер\n- deploy [app-name] [region] - задеплоить приложение\n- monitor - показать нагрузку серверов\n- regions - список доступных регионов\n- sftp - получить SFTP доступ\n- ls [path] - показать файлы на сервере\n- cat [file] - просмотреть содержимое файла\n- status\n- servers list\n- server ip\n- clear';
         break;
       case 'start':
         output = 'Starting server...\n⚡ Initializing server instance\n⚡ Allocating resources (4 vCPU, 8GB RAM)\n⚡ Configuring network (IP: 45.123.67.89)\n⚡ Starting services\n⚡ Running health checks\n✓ Server started successfully!\n\n📊 Server details:\n  Region: us-east-1\n  IP: 45.123.67.89\n  Status: 🟢 Running\n  Uptime: 0s\n  Load: 0%\n\n🚀 Server is ready to accept connections!';
@@ -44,6 +44,9 @@ const Index = () => {
       case 'regions':
         output = 'Доступные регионы для деплоя:\n\n╭─────────────────┬──────────────────────┬──────────╮\n│ Region          │ Location             │ Latency  │\n├─────────────────┼──────────────────────┼──────────┤\n│ us-east-1       │ 🇺🇸 N. Virginia       │ 45ms     │\n│ eu-west-1       │ 🇮🇪 Ireland           │ 32ms     │\n│ ap-southeast-1  │ 🇸🇬 Singapore         │ 78ms     │\n│ ap-south-1      │ 🇮🇳 Mumbai            │ 92ms     │\n│ sa-east-1       │ 🇧🇷 São Paulo         │ 156ms    │\n╰─────────────────┴──────────────────────┴──────────╯\n\nИспользуйте: deploy [app-name] [region]';
         break;
+      case 'sftp':
+        output = '🔐 SFTP Connection Details\n\n╭─────────────────────────────────────────╮\n│ Host: sftp.cloudhost.dev                │\n│ Port: 22                                │\n│ User: cloudhost-user                    │\n│ Password: ••••••••••                    │\n│ IP: 45.123.67.89                        │\n╰─────────────────────────────────────────╯\n\n📋 Клиенты для подключения:\n  • FileZilla - https://filezilla-project.org\n  • WinSCP - https://winscp.net\n  • Cyberduck - https://cyberduck.io\n\n💡 Команда для CLI:\n  sftp cloudhost-user@sftp.cloudhost.dev\n\n✓ Root директория: /var/www/html\n✓ Доступ: Read/Write';
+        break;
       case 'clear':
         setTerminalHistory([]);
         setTerminalInput('');
@@ -51,7 +54,21 @@ const Index = () => {
       case '':
         return;
       default:
-        if (command.startsWith('deploy ')) {
+        if (command === 'ls' || command.startsWith('ls ')) {
+          const path = command.replace('ls', '').trim() || '/var/www/html';
+          output = `📁 Listing: ${path}\n\n╭────────────────────┬─────────┬──────────────────╮\n│ Name               │ Size    │ Modified         │\n├────────────────────┼─────────┼──────────────────┤\n│ 📁 public          │ -       │ 2024-12-01 14:23 │\n│ 📁 src             │ -       │ 2024-12-01 15:45 │\n│ 📁 node_modules    │ -       │ 2024-11-28 10:12 │\n│ 📄 index.html      │ 1.2 KB  │ 2024-12-01 14:20 │\n│ 📄 package.json    │ 856 B   │ 2024-11-30 09:15 │\n│ 📄 vite.config.ts  │ 423 B   │ 2024-11-28 11:34 │\n│ 📄 .env            │ 234 B   │ 2024-12-01 12:05 │\n╰────────────────────┴─────────┴──────────────────╯\n\n💡 Используйте: cat [filename] для просмотра';
+        } else if (command.startsWith('cat ')) {
+          const filename = command.replace('cat', '').trim();
+          if (filename === 'package.json') {
+            output = `📄 ${filename}\n\n{\n  "name": "my-awesome-app",\n  "version": "1.0.0",\n  "scripts": {\n    "dev": "vite",\n    "build": "vite build",\n    "preview": "vite preview"\n  },\n  "dependencies": {\n    "react": "^18.2.0",\n    "react-dom": "^18.2.0"\n  }\n}`;
+          } else if (filename === '.env') {
+            output = `📄 ${filename}\n\nVITE_API_URL=https://api.cloudhost.dev\nVITE_APP_NAME=my-awesome-app\nPORT=3000\nNODE_ENV=production`;
+          } else if (filename === 'index.html') {
+            output = `📄 ${filename}\n\n<!DOCTYPE html>\n<html lang="en">\n  <head>\n    <meta charset="UTF-8" />\n    <meta name="viewport" content="width=device-width" />\n    <title>My Awesome App</title>\n  </head>\n  <body>\n    <div id="root"></div>\n    <script type="module" src="/src/main.tsx"></script>\n  </body>\n</html>`;
+          } else {
+            output = `❌ File not found: ${filename}\n\n💡 Use 'ls' to see available files`;
+          }
+        } else if (command.startsWith('deploy ')) {
           const parts = command.split(' ');
           const appName = parts[1] || 'app';
           const region = parts[2] || 'us-east-1';
@@ -340,7 +357,7 @@ const Index = () => {
           </div>
 
           <div className="bg-[#161B22] px-4 py-2 border-t border-white/10 flex gap-4 text-xs text-gray-400">
-            <span>Команды: start, stop, restart, deploy [app] [region], monitor, regions, help, status, servers list, clear</span>
+            <span>Команды: start, stop, restart, deploy, monitor, regions, sftp, ls, cat, help, status, clear</span>
           </div>
         </Card>
       </section>
