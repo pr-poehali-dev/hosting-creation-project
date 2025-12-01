@@ -18,7 +18,10 @@ const Index = () => {
 
     switch (command) {
       case 'help':
-        output = 'Available commands:\n- deploy [app-name]\n- status\n- servers list\n- server ip\n- clear';
+        output = 'Available commands:\n- start - запустить сервер\n- deploy [app-name]\n- status\n- servers list\n- server ip\n- clear';
+        break;
+      case 'start':
+        output = 'Starting server...\n⚡ Initializing server instance\n⚡ Allocating resources (4 vCPU, 8GB RAM)\n⚡ Configuring network (IP: 45.123.67.89)\n⚡ Starting services\n⚡ Running health checks\n✓ Server started successfully!\n\n📊 Server details:\n  Region: us-east-1\n  IP: 45.123.67.89\n  Status: 🟢 Running\n  Uptime: 0s\n  Load: 0%\n\n🚀 Server is ready to accept connections!';
         break;
       case 'status':
         output = '✓ All systems operational\n✓ 99.99% uptime\n✓ 234 servers active\n✓ Load: 45%';
@@ -307,7 +310,7 @@ const Index = () => {
           </div>
 
           <div className="bg-[#161B22] px-4 py-2 border-t border-white/10 flex gap-4 text-xs text-gray-400">
-            <span>Команды: help, status, deploy, servers list, server ip, clear</span>
+            <span>Команды: start, help, status, deploy, servers list, server ip, clear</span>
           </div>
         </Card>
       </section>
