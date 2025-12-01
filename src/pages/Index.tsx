@@ -18,7 +18,7 @@ const Index = () => {
 
     switch (command) {
       case 'help':
-        output = 'Available commands:\n- start - запустить сервер\n- stop - остановить сервер\n- restart - перезапустить сервер\n- deploy [app-name]\n- status\n- servers list\n- server ip\n- clear';
+        output = 'Available commands:\n- start - запустить сервер\n- stop - остановить сервер\n- restart - перезапустить сервер\n- deploy [app-name] [region] - задеплоить приложение\n- monitor - показать нагрузку серверов\n- regions - список доступных регионов\n- status\n- servers list\n- server ip\n- clear';
         break;
       case 'start':
         output = 'Starting server...\n⚡ Initializing server instance\n⚡ Allocating resources (4 vCPU, 8GB RAM)\n⚡ Configuring network (IP: 45.123.67.89)\n⚡ Starting services\n⚡ Running health checks\n✓ Server started successfully!\n\n📊 Server details:\n  Region: us-east-1\n  IP: 45.123.67.89\n  Status: 🟢 Running\n  Uptime: 0s\n  Load: 0%\n\n🚀 Server is ready to accept connections!';
@@ -38,6 +38,12 @@ const Index = () => {
       case 'server ip':
         output = 'Server IP addresses:\n\n╭─────────────────┬──────────────────╮\n│ Region          │ IP Address       │\n├─────────────────┼──────────────────┤\n│ us-east-1       │ 45.123.67.89     │\n│ eu-west-1       │ 78.234.12.45     │\n│ ap-southeast-1  │ 103.45.89.23     │\n│ load-balancer   │ 185.67.234.12    │\n╰─────────────────┴──────────────────╯';
         break;
+      case 'monitor':
+        output = 'Server Load Monitor 📊\n\n╭─────────────────┬──────────┬──────────┬──────────┬──────────╮\n│ Region          │ CPU      │ RAM      │ Network  │ Status   │\n├─────────────────┼──────────┼──────────┼──────────┼──────────┤\n│ us-east-1       │ 45% ████ │ 62% █████│ 234 MB/s │ 🟢 OK    │\n│ eu-west-1       │ 23% ██   │ 38% ███  │ 156 MB/s │ 🟢 OK    │\n│ ap-southeast-1  │ 67% █████│ 78% █████│ 412 MB/s │ 🟡 High  │\n│ ap-south-1      │ 12% █    │ 24% ██   │ 89 MB/s  │ 🟢 OK    │\n│ sa-east-1       │ 34% ███  │ 45% ████ │ 178 MB/s │ 🟢 OK    │\n╰─────────────────┴──────────┴──────────┴──────────┴──────────╯\n\n💡 Рекомендация: ap-south-1 имеет минимальную нагрузку';
+        break;
+      case 'regions':
+        output = 'Доступные регионы для деплоя:\n\n╭─────────────────┬──────────────────────┬──────────╮\n│ Region          │ Location             │ Latency  │\n├─────────────────┼──────────────────────┼──────────┤\n│ us-east-1       │ 🇺🇸 N. Virginia       │ 45ms     │\n│ eu-west-1       │ 🇮🇪 Ireland           │ 32ms     │\n│ ap-southeast-1  │ 🇸🇬 Singapore         │ 78ms     │\n│ ap-south-1      │ 🇮🇳 Mumbai            │ 92ms     │\n│ sa-east-1       │ 🇧🇷 São Paulo         │ 156ms    │\n╰─────────────────┴──────────────────────┴──────────╯\n\nИспользуйте: deploy [app-name] [region]';
+        break;
       case 'clear':
         setTerminalHistory([]);
         setTerminalInput('');
@@ -46,8 +52,26 @@ const Index = () => {
         return;
       default:
         if (command.startsWith('deploy ')) {
-          const appName = command.replace('deploy ', '');
-          output = `Deploying ${appName}...\n✓ Build successful\n✓ Deployment complete\n→ https://${appName}.cloudhost.dev`;
+          const parts = command.split(' ');
+          const appName = parts[1] || 'app';
+          const region = parts[2] || 'us-east-1';
+          const regionIPs: Record<string, string> = {
+            'us-east-1': '45.123.67.89',
+            'eu-west-1': '78.234.12.45',
+            'ap-southeast-1': '103.45.89.23',
+            'ap-south-1': '52.89.145.67',
+            'sa-east-1': '93.178.42.91'
+          };
+          const regionNames: Record<string, string> = {
+            'us-east-1': '🇺🇸 N. Virginia',
+            'eu-west-1': '🇮🇪 Ireland',
+            'ap-southeast-1': '🇸🇬 Singapore',
+            'ap-south-1': '🇮🇳 Mumbai',
+            'sa-east-1': '🇧🇷 São Paulo'
+          };
+          const ip = regionIPs[region] || regionIPs['us-east-1'];
+          const location = regionNames[region] || regionNames['us-east-1'];
+          output = `Deploying ${appName} to ${location}...\n✓ Selected region: ${region}\n✓ Build successful\n✓ Deployment complete\n→ https://${appName}.cloudhost.dev\n→ Server IP: ${ip}\n→ Region: ${location}`;
         } else {
           output = `Command not found: ${command}\nType 'help' for available commands`;
         }
@@ -316,7 +340,7 @@ const Index = () => {
           </div>
 
           <div className="bg-[#161B22] px-4 py-2 border-t border-white/10 flex gap-4 text-xs text-gray-400">
-            <span>Команды: start, stop, restart, help, status, deploy, servers list, server ip, clear</span>
+            <span>Команды: start, stop, restart, deploy [app] [region], monitor, regions, help, status, servers list, clear</span>
           </div>
         </Card>
       </section>
